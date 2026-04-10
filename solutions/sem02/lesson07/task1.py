@@ -13,21 +13,19 @@ def visualize_diagrams(
     ordinates: np.ndarray,
     diagram_type: Any,
 ) -> None:
-    if abscissa.shape!=ordinates.shape:
+    if abscissa.shape != ordinates.shape:
         raise ShapeMismatchError("shapes do not match")
-    if diagram_type not in ("hist","box","violin"):
+    if diagram_type not in ("hist", "box", "violin"):
         raise ValueError("invalid diagram type")
-    
+
     figure = plt.figure(figsize=(8, 8))
-    space=0.3
+    space = 0.3
     grid = plt.GridSpec(4, 4, wspace=space, hspace=space)
 
     axis_scatter = figure.add_subplot(grid[:-1, 1:])
     axis_scatter.scatter(abscissa, ordinates, color="cornflowerblue", alpha=0.5)
 
-    
-
-    if diagram_type=="hist":
+    if diagram_type == "hist":
         axis_vert = figure.add_subplot(
             grid[:-1, 0],
             sharey=axis_scatter,
@@ -53,17 +51,10 @@ def visualize_diagrams(
         )
         axis_hor.invert_yaxis()
         axis_vert.invert_xaxis()
-        
-    if diagram_type=="violin":
-        axis_vert=figure.add_subplot(
-            grid[:-1, 0],
-            sharey=axis_scatter
-        )
-        violin_parts_vert=axis_vert.violinplot(
-            ordinates,
-            vert=True,
-            showmedians=True
-        )
+
+    if diagram_type == "violin":
+        axis_vert = figure.add_subplot(grid[:-1, 0], sharey=axis_scatter)
+        violin_parts_vert = axis_vert.violinplot(ordinates, vert=True, showmedians=True)
         for body in violin_parts_vert["bodies"]:
             body.set_facecolor("grey")
             body.set_edgecolor("darkgrey")
@@ -74,15 +65,11 @@ def visualize_diagrams(
 
             violin_parts_vert[part].set_edgecolor("grey")
 
-        axis_hor=figure.add_subplot(
+        axis_hor = figure.add_subplot(
             grid[-1, 1:],
             sharex=axis_scatter,
         )
-        violin_parts_hor=axis_hor.violinplot(
-            abscissa,
-            vert=False,
-            showmedians=True
-        )
+        violin_parts_hor = axis_hor.violinplot(abscissa, vert=False, showmedians=True)
         for body in violin_parts_hor["bodies"]:
             body.set_facecolor("red")
             body.set_edgecolor("orange")
@@ -91,10 +78,10 @@ def visualize_diagrams(
             if part == "bodies":
                 continue
 
-            violin_parts_hor[part].set_edgecolor("red")        
-    
-    if diagram_type=="box":
-        axis_vert=figure.add_subplot(
+            violin_parts_hor[part].set_edgecolor("red")
+
+    if diagram_type == "box":
+        axis_vert = figure.add_subplot(
             grid[:-1, 0],
             sharey=axis_scatter,
         )
@@ -105,7 +92,7 @@ def visualize_diagrams(
             boxprops=dict(facecolor="grey"),
             medianprops=dict(color="black"),
         )
-        axis_hor=figure.add_subplot(
+        axis_hor = figure.add_subplot(
             grid[-1, 1:],
             sharex=axis_scatter,
         )
@@ -116,13 +103,6 @@ def visualize_diagrams(
             boxprops=dict(facecolor="red"),
             medianprops=dict(color="yellow"),
         )
-
-
-
-
-    
-    
-
 
 
 if __name__ == "__main__":
